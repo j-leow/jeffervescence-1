@@ -33,7 +33,10 @@ class App {
     this.list
       .insertBefore(listItem, this.list.firstChild)
 
-    ++ this.max
+    if (flick.id > this.max) {
+      this.max = flick.id
+    }
+
     this.flicks.unshift(flick)
     this.save()
   }
