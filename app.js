@@ -1,5 +1,5 @@
-const app = {
-  init(selectors) {
+class App {
+  constructor(selectors) {
     this.flicks = []
     this.max = 0
     this.list = document
@@ -11,7 +11,7 @@ const app = {
       .addEventListener('submit', this.addFlickViaForm.bind(this))
 
     this.load()
-  },
+  }
 
   load() {
     // Get the JSON string out of localStorage
@@ -26,7 +26,7 @@ const app = {
         .reverse()
         .map(this.addFlick.bind(this))
     }
-  },
+  }
 
   addFlick(flick) {
     const listItem = this.renderListItem(flick)
@@ -36,7 +36,7 @@ const app = {
     ++ this.max
     this.flicks.unshift(flick)
     this.save()
-  },
+  }
 
   addFlickViaForm(ev) {
     ev.preventDefault()
@@ -49,13 +49,13 @@ const app = {
     this.addFlick(flick)
 
     f.reset()
-  },
+  }
 
   save() {
     localStorage
       .setItem('flicks', JSON.stringify(this.flicks))
 
-  },
+  }
 
   renderListItem(flick) {
     const item = this.template.cloneNode(true)
@@ -68,6 +68,10 @@ const app = {
     if(flick.fav) {
       item.classList.add('fav')
     }
+
+    item
+      .querySelector('.flick-name')
+      .addEventListener('keypress', this.saveOnEnter.bind(this, flick))
 
     item
       .querySelector('button.remove')
@@ -89,7 +93,7 @@ const app = {
       .querySelector('button.edit')
       .addEventListener('click', this.edit.bind(this, flick))
     return item
-  },
+  }
 
   removeFlick(ev) {
     const listItem = ev.currentTarget.closest('.flick')
@@ -105,7 +109,7 @@ const app = {
 
     listItem.remove()
     this.save()
-  },
+  }
 
   favFlick(flick, ev) {
     const listItem = ev.currentTarget.closest('.flick')
@@ -125,7 +129,7 @@ const app = {
       listItem.classList.remove('fav')
     }
     this.save()
-  },
+  }
 
   moveUp(flick, ev) {
     const listItem = ev.currentTarget.closest('.flick')
@@ -145,7 +149,7 @@ const app = {
       this.flicks[index] = previousFlick
       this.save()
     }
-  },
+  }
 
   moveDown(flick, ev) {
     const listItem = ev.currentTarget.closest('.flick')
@@ -161,39 +165,44 @@ const app = {
       this.flicks[index + 1] = flick
       this.flicks[index] = nextFlick
       this.save()
-  },
+  }
 
   edit(flick, ev) {
     //We need the span, not the li to be editable.
-    const btn = ev.currentTarget
-    const listItem = btn.closest('.flick')
+    const listItem = ev.target.closest('.flick')
     const nameField = listItem.querySelector('.flick-name')
-    const icon = btn.querySelector('i.fa') //Change icon
+    const btn = listItem.querySelector('.edit.button')
+
+    const icon = btn.querySelector('i.fa')
 
     if (nameField.isContentEditable) {
-      //Make it no longer editable.
-      nameField.concontentEditable = false
-      icon.classList.add('fa-pencil')
+      // make it no longer editable
+      nameField.contentEditable = false
       icon.classList.remove('fa-check')
+      icon.classList.add('fa-pencil')
       btn.classList.remove('success')
-      //Save changes.
-      flick.name = nameField.textContent    //We're actually editing textContent
-      this.save()
-    }
 
-    else {
-      //Make it editable.
+      // save changes
+      flick.name = nameField.textContent //We're actually editing textContent
+      this.save()
+    } else {
       nameField.contentEditable = true
       nameField.focus()
       icon.classList.remove('fa-pencil')
       icon.classList.add('fa-check')
       btn.classList.add('success')
     }
-  },
+  }
+
+  saveOnEnter(flick, ev) {
+    if (ev.key === 'Enter') {
+      this.edit(flick, ev)
+    }
+  }
 
 }
 
-app.init({
+const app = new App({
   formSelector: '#flick-form',
   listSelector: '#flick-list',
   templateSelector: '.flick.template',
