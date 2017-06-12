@@ -32,7 +32,7 @@ const app = {
     const listItem = this.renderListItem(flick)
     this.list
       .insertBefore(listItem, this.list.firstChild)
-    
+
     ++ this.max
     this.flicks.unshift(flick)
     this.save()
@@ -65,10 +65,17 @@ const app = {
       .querySelector('.flick-name')
       .textContent = flick.name
 
+    if(flick.fav) {
+      item.classList.add('fav')
+    }
+
     item
       .querySelector('button.remove')
       .addEventListener('click', this.removeFlick.bind(this))
 
+    item
+      .querySelector('button.fav')
+      .addEventListener('click', this.favFlick.bind(this, flick))
     return item
   },
 
@@ -85,6 +92,26 @@ const app = {
     }
 
     listItem.remove()
+    this.save()
+  },
+
+  favFlick(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+
+    // listItem.classList.toggle('fav')
+    // flick.fav = !flick.fav  //This will allow the method toggle to be used.
+
+    //OR
+    //Preferred way, more explicit.
+
+    flick.fav = !flick.fav
+
+    if (flick.fav) {
+      listItem.classList.add('fav')
+    }
+    else {
+      listItem.classList.remove('fav')
+    }
     this.save()
   },
 }
