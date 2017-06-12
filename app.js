@@ -84,11 +84,15 @@ const app = {
     item
       .querySelector('button.fav')
       .addEventListener('click', this.favFlick.bind(this, flick))
+
+    item
+      .querySelector('button.edit')
+      .addEventListener('click', this.edit.bind(this, flick))
     return item
   },
 
   removeFlick(ev) {
-    const listItem = ev.target.closest('.flick')
+    const listItem = ev.currentTarget.closest('.flick')
 
     // Find the flick in the array, and remove it
     for (let i = 0; i < this.flicks.length; i++) {
@@ -104,7 +108,7 @@ const app = {
   },
 
   favFlick(flick, ev) {
-    const listItem = ev.target.closest('.flick')
+    const listItem = ev.currentTarget.closest('.flick')
 
     // listItem.classList.toggle('fav')
     // flick.fav = !flick.fav  //This will allow the method toggle to be used.
@@ -124,7 +128,7 @@ const app = {
   },
 
   moveUp(flick, ev) {
-    const listItem = ev.target.closest('.flick')
+    const listItem = ev.currentTarget.closest('.flick')
 
     const index = this.flicks.findIndex((currentFlick, i) => {
       //Return true when it's the index we want - this way, we don't need a for loop. It will return -1 if the item is not in the array at all. If it was the first time, it will return 0.
@@ -144,7 +148,7 @@ const app = {
   },
 
   moveDown(flick, ev) {
-    const listItem = ev.target.closest('.flick')
+    const listItem = ev.currentTarget.closest('.flick')
 
     const index = this.flicks.findIndex((currentFlick, i) => {
       return currentFlick.id === flick.id
@@ -158,6 +162,35 @@ const app = {
       this.flicks[index] = nextFlick
       this.save()
   },
+
+  edit(flick, ev) {
+    //We need the span, not the li to be editable.
+    const btn = ev.currentTarget
+    const listItem = btn.closest('.flick')
+    const nameField = listItem.querySelector('.flick-name')
+    const icon = btn.querySelector('i.fa') //Change icon
+
+    if (nameField.isContentEditable) {
+      //Make it no longer editable.
+      nameField.concontentEditable = false
+      icon.classList.add('fa-pencil')
+      icon.classList.remove('fa-check')
+      btn.classList.remove('success')
+      //Save changes.
+      flick.name = nameField.textContent    //We're actually editing textContent
+      this.save()
+    }
+
+    else {
+      //Make it editable.
+      nameField.contentEditable = true
+      nameField.focus()
+      icon.classList.remove('fa-pencil')
+      icon.classList.add('fa-check')
+      btn.classList.add('success')
+    }
+  },
+
 }
 
 app.init({
