@@ -74,6 +74,14 @@ const app = {
       .addEventListener('click', this.removeFlick.bind(this))
 
     item
+      .querySelector('button.move-up')
+      .addEventListener('click', this.moveUp.bind(this, flick))
+
+    item
+      .querySelector('button.move-down')
+      .addEventListener('click', this.moveDown.bind(this, flick))
+
+    item
       .querySelector('button.fav')
       .addEventListener('click', this.favFlick.bind(this, flick))
     return item
@@ -113,6 +121,42 @@ const app = {
       listItem.classList.remove('fav')
     }
     this.save()
+  },
+
+  moveUp(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+
+    const index = this.flicks.findIndex((currentFlick, i) => {
+      //Return true when it's the index we want - this way, we don't need a for loop. It will return -1 if the item is not in the array at all. If it was the first time, it will return 0.
+      return currentFlick.id === flick.id
+    })
+
+    //This will make it so that the moveUp function will not call when it is the first item. This will not throw an error.
+    if (index > 0) {
+      this.list.insertBefore(listItem, listItem.previousElementSibling) //Use previousElementSibling in case there is a textbox between the elements. We want to target the elements.
+
+      //Fix the array order
+      const previousFlick = this.flicks[index - 1]
+      this.flicks[index - 1] = flick
+      this.flicks[index] = previousFlick
+      this.save()
+    }
+  },
+
+  moveDown(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+
+    const index = this.flicks.findIndex((currentFlick, i) => {
+      return currentFlick.id === flick.id
+    })
+
+    if (index < this.flicks.length - 1) //If it's not the last one
+      this.list.insertBefore(listItem.nextElementSibling, listItem) //We're inserting what comes next, so nextElementSibling is used. And we'll move this up.
+
+      const nextFlick = this.flicks[index + 1]
+      this.flicks[index + 1] = flick
+      this.flicks[index] = nextFlick
+      this.save()
   },
 }
 

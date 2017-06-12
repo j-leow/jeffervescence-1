@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/app.css">
-
   </head>
   <body>
     <div class="row">
@@ -30,11 +29,10 @@
                 class="success button"
                 type="submit"
               >
-              <i
-                class="fa fa-plus"
-                aria-hidden="true"
-              >
-              </i>
+                <i
+                  class="fa fa-plus"
+                  aria-hidden="true"
+                ></i>
               </button>
             </div>
           </div>
@@ -45,28 +43,37 @@
     <div class="row">
       <div class="medium-8 medium-offset-2 column">
         <ul class="no-bullet" id="flick-list">
-          <li class="flick template">
-            <span class="flick-name"></span>
-            <span class="actions button-group">
-              <button class="fav button">
-                <i
-                  class="fa fa-star-o"
-                  aria-hidden="true"
-                >
-                </i>
-              </button>
-              <button class="remove button alert">
-                <i
-                  class="fa fa-trash-o"
-                  aria-hidden="true"
-                >
-                </i>
-              </button>
-            </span>
-          </li>
         </ul>
       </div>
     </div>
+
+  <li class="flick template">
+    <span class="flick-name"></span>
+    <span class="actions button-group">
+      <button class="fav button">
+        <i
+          class="fa fa-star"
+          aria-hidden="true"
+        ></i>
+      </button>
+      <button class="move-up button">
+        <i
+          class="fa fa-arrow-up"
+          aria-hidden="true"
+        ></i>
+      <button class="move-down button">
+        <i
+          class="fa fa-arrow-down"
+          aria-hidden="true"
+        ></i>
+      <button class="remove button alert">
+        <i
+          class="fa fa-trash-o"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </span>
+  </li>
 
     <script src="app.js"></script>
   </body>
